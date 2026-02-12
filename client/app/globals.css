@@ -1,26 +1,245 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@theme {
+  --font-sans: var(--font-plus-jakarta), var(--font-inter), system-ui, sans-serif;
+  --font-heading: var(--font-plus-jakarta), system-ui, sans-serif;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
+  /* Custom MedLink Tokens */
+  --color-teal: hsl(var(--teal));
+  --color-teal-light: hsl(var(--teal-light));
+  --color-emergency: hsl(var(--emergency));
+  --color-emergency-foreground: hsl(var(--emergency-foreground));
+
+  --shadow-card: var(--card-shadow);
+  --shadow-card-hover: var(--card-shadow-hover);
+
+  --animate-heartbeat: heartbeat 2s ease-in-out infinite;
+
+  @keyframes heartbeat {
+
+    0%,
+    100% {
+      transform: scale(1);
+    }
+
+    50% {
+      transform: scale(1.05);
+    }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+:root {
+  --background: 200 20% 98%;
+  --foreground: 210 40% 12%;
+
+  --card: 0 0% 100%;
+  --card-foreground: 210 40% 12%;
+
+  --popover: 0 0% 100%;
+  --popover-foreground: 210 40% 12%;
+
+  --primary: 199 89% 38%;
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 168 60% 42%;
+  --secondary-foreground: 0 0% 100%;
+
+  --muted: 200 20% 95%;
+  --muted-foreground: 210 15% 46%;
+
+  --accent: 168 50% 93%;
+  --accent-foreground: 168 60% 28%;
+
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 0 0% 100%;
+
+  --border: 200 20% 90%;
+  --input: 200 20% 90%;
+  --ring: 199 89% 38%;
+
+  --radius: 0.75rem;
+
+  /* Custom MedLink tokens */
+  --emergency: 0 72% 51%;
+  --emergency-foreground: 0 0% 100%;
+  --teal: 168 60% 42%;
+  --teal-light: 168 50% 93%;
+  --hero-gradient: linear-gradient(135deg, hsl(199, 89%, 38%) 0%, hsl(168, 60%, 42%) 100%);
+  --card-shadow: 0 4px 24px -4px hsl(199 89% 38% / 0.08);
+  --card-shadow-hover: 0 8px 32px -4px hsl(199 89% 38% / 0.15);
+  --emergency-glow: 0 0 24px hsl(0 72% 51% / 0.3);
+
+  --sidebar-background: 0 0% 98%;
+  --sidebar-foreground: 240 5.3% 26.1%;
+  --sidebar-primary: 240 5.9% 10%;
+  --sidebar-primary-foreground: 0 0% 98%;
+  --sidebar-accent: 240 4.8% 95.9%;
+  --sidebar-accent-foreground: 240 5.9% 10%;
+  --sidebar-border: 220 13% 91%;
+  --sidebar-ring: 217.2 91.2% 59.8%;
+}
+
+.dark {
+  --background: 210 40% 6%;
+  --foreground: 200 20% 95%;
+  --card: 210 35% 10%;
+  --card-foreground: 200 20% 95%;
+  --popover: 210 35% 10%;
+  --popover-foreground: 200 20% 95%;
+  --primary: 199 89% 48%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 168 60% 42%;
+  --secondary-foreground: 0 0% 100%;
+  --muted: 210 30% 15%;
+  --muted-foreground: 200 15% 60%;
+  --accent: 168 40% 15%;
+  --accent-foreground: 168 50% 70%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 210 30% 18%;
+  --input: 210 30% 18%;
+  --ring: 199 89% 48%;
+  --sidebar-background: 240 5.9% 10%;
+  --sidebar-foreground: 240 4.8% 95.9%;
+  --sidebar-primary: 224.3 76.3% 48%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 240 3.7% 15.9%;
+  --sidebar-accent-foreground: 240 4.8% 95.9%;
+  --sidebar-border: 240 3.7% 15.9%;
+  --sidebar-ring: 217.2 91.2% 59.8%;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-heading font-semibold tracking-tight;
+  }
+}
+
+@layer utilities {
+  .gradient-primary {
+    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--secondary)) 100%);
+  }
+
+  .gradient-hero {
+    background: linear-gradient(160deg, hsl(199, 89%, 95%) 0%, hsl(168, 50%, 93%) 50%, hsl(200, 20%, 98%) 100%);
+  }
+
+  .text-gradient {
+    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--secondary)) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .shadow-card {
+    box-shadow: var(--card-shadow);
+  }
+
+  .shadow-card-hover {
+    box-shadow: var(--card-shadow-hover);
+  }
+
+  .emergency-glow {
+    box-shadow: var(--emergency-glow);
+  }
+
+  .heartbeat-line {
+    background: linear-gradient(90deg, transparent 0%, hsl(var(--primary) / 0.1) 50%, transparent 100%);
+  }
+}
+
+/* Lovable Starter Styles (Optional/Fallback) */
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
 }
