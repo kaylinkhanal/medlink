@@ -1,15 +1,23 @@
-import express from 'express'
-const app = express()
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import connect from "./db/connect.js";
+import authRouter from "./routes/user.js";
 
-const port = 8080
-import connect from './db/connect.js';
-import rideRouter from './routes/ride.js';
+dotenv.config();
+const app = express();
+const port = process.env.PORT || 8080;
+
+app.use(cors({
+  origin: process.env.FRONTEND_URL
+}));
+
+app.use(express.json());
+
+app.use("/auth", authRouter);
+
 connect();
-app.use(express.json())
-app.use(rideRouter)
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
-
-
+  console.log(`Server running on port ${port}`);
+});
