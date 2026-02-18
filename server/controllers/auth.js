@@ -1,92 +1,65 @@
 import User from "../models/user.js";
 import bcrypt from "bcryptjs";
+const saltRounds = 10;
 import jwt from "jsonwebtoken";
-import sendMail from "../utils/sendMail.js";
-import crypto from "crypto";
-
 const signup = async (req, res) => {
   try {
-    const { username, email, password } = req.body;
-    if (!username || !email || !password)
-      return res.status(400).json({ message: "All fields are required" });
-
-    const existingUser = await User.findOne({ email });
-    if (existingUser)
-      return res.status(400).json({ message: "Email already registered" });
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const code = crypto.randomInt(100000, 999999).toString();
-    const codeExpiry = Date.now() + 3600000; 
-
-    const newUser = await User.create({
-      username,
-      email,
-      password: hashedPassword,
-      verifyToken: code,
-      verifyTokenExpiry: codeExpiry
-    });
-
-    // Send email
-    await sendMail({ email, code });
-
-    res.status(201).json({ message: "Verification code sent to your email." });
+    const { fullName, email, password } = req.body;
+    //step 1:  check if username or email exists
+        const existingEmail = await User.findOne({ email });
+        // yes: send error message that username or email already exists
+          if (existingEmail) {
+            return res.status(409).send({ message: "Email already exists" });
+          }
+        // no :
+        // Step 2: 
+            const hashPassword = await bcrypt.hash(password, saltRounds);
+            req.body.password = hashPassword;
+          // hash the password
+        // Step 3:
+          // create user 
+          const user =  await User.create(req.body)
+          res.send({message: "Signup successful"})
+ 
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Server error" });
+
   }
 };
 
 const verifyCode = async (req, res) => {
   try {
-    const { email, code } = req.body;
 
-    const user = await User.findOne({
-      email,
-      verifyToken: code,
-      verifyTokenExpiry: { $gt: Date.now() }
-    });
-
-    if (!user)
-      return res.status(400).json({ message: "Invalid or expired code" });
-
-    user.isVerified = true;
-    user.verifyToken = undefined;
-    user.verifyTokenExpiry = undefined;
-    await user.save();
-
-    res.json({ message: "Email verified successfully!" });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Server error" });
+  
   }
 };
 
 
 const login = async (req, res) => {
   try {
+  // step 1: check if email exists
     const { email, password } = req.body;
-    if (!email || !password)
-      return res.status(400).json({ message: "Email and password are required" });
-
     const user = await User.findOne({ email });
-    if (!user || !user.isVerified)
-      return res.status(400).json({ message: "Invalid email or password" });
+  // no :
+    if(!user){
+      return res.status(404).send({ message: "Email does not exist" });
+    }
+    // send error message that email does not exist
+  // yes
+    
+  // step 2: compare password
+    const passwordMatch = await bcrypt.compare(password, user.password);
+  // no:  send error message that password is incorrect
+    if(!passwordMatch){
+      return res.status(401).send({ message: "Incorrect password" });
+    }
+  // yes:
+  // step 3: 
+      const token = await jwt.sign({ email }, '13erfdbvosahibdvfksda');
+      res.send({ token, message: "Login successful", user });
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch)
-      return res.status(400).json({ message: "Invalid email or password" });
-
-    const token = jwt.sign(
-      { userId: user._id },
-      process.env.JWT_SECRET,
-      { expiresIn: "1d" }
-    );
-
-    res.json({ message: `Welcome ${user.username}`, token });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Server error" });
+    console.log(err)
   }
 };
 

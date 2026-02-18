@@ -10,13 +10,28 @@ import { toast } from "sonner";
 
 
 const SignupSchema = Yup.object({
-  username: Yup.string().required("Username is required"),
+  fullName: Yup.string().required("fullName is required"),
   email: Yup.string().email("Invalid email").required("Email is required"),
   password: Yup.string().min(6, "Minimum 6 characters").required("Password required"),
 });
 
 export default function SignupPage() {
   const router = useRouter();
+  const handleSubmit = async (values, { resetForm }) => {
+    try {
+      const res = await axios.post(
+        process.env.NEXT_PUBLIC_API_URL +  "/signup",
+        values
+      );
+
+      toast(res.data.message);
+      resetForm();
+      router.push("/verify"); 
+
+    } catch (error: any) {
+      toast(error?.response?.data?.message || "Signup failed");
+    }
+  }
   return (
     <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center">
       <div className="bg-white p-8 rounded-xl shadow-md w-[350px]">
@@ -35,32 +50,18 @@ export default function SignupPage() {
         </h2>
 
         <Formik
-          initialValues={{ username: "", email: "", password: "" }}
+          initialValues={{ fullName: "", email: "", password: "" }}
           validationSchema={SignupSchema}
-          onSubmit={async (values, { resetForm }) => {
-            try {
-              const res = await axios.post(
-                "http://localhost:8080/auth/signup",
-                values
-              );
-
-              toast(res.data.message);
-              resetForm();
-              router.push("/verify"); 
-
-            } catch (error: any) {
-              toast(error?.response?.data?.message || "Signup failed");
-            }
-          }}
+          onSubmit={handleSubmit}
         >
           <Form className="flex flex-col gap-4">
             <div>
-              <label className="text-sm text-[#64748B]">Username</label>
+              <label className="text-sm text-[#64748B]">fullName</label>
               <Field
-                name="username"
+                name="fullName"
                 className="w-full border p-2 rounded-lg focus:outline-none focus:border-[#2A7FFF]"
               />
-              <ErrorMessage name="username" component="div" className="text-red-500 text-sm" />
+              <ErrorMessage name="fullName" component="div" className="text-red-500 text-sm" />
             </div>
 
             <div>

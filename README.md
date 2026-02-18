@@ -13,7 +13,7 @@
 ### 🔐 **Level 1 – Authentication & User Management**
 
 **User Registration & Account**
-- [ ] User Registration with Email & Phone
+- [x] User Registration with Email & Phone
 - [ ] Secure Login with JWT Tokens
 - [ ] Email Verification
 

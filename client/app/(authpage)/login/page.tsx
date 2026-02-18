@@ -16,6 +16,25 @@ const LoginSchema = Yup.object({
 
 export default function LoginPage() {
   const router = useRouter();
+
+  const handleSubmit = async (values) => {
+    try {
+      const res = await axios.post(
+        process.env.NEXT_PUBLIC_API_URL +  "/login",
+        values
+      );
+
+      toast(res.data?.message );
+      router.push("/dashboard"); 
+      if (res.data.token) {
+        localStorage.setItem("token", res.data.token);
+      }
+
+    } catch (error: any) {
+      toast(error?.response?.data?.message || "Login failed");
+    }
+  }
+
   return (
     <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center">
 
@@ -38,24 +57,7 @@ export default function LoginPage() {
         <Formik
           initialValues={{ email: "", password: "" }}
           validationSchema={LoginSchema}
-          onSubmit={async (values) => {
-            try {
-              const res = await axios.post(
-                "http://localhost:8080/auth/login",
-                values
-              );
-
-              toast(res.data.message);
-              router.push("/dashboard"); 
-
-              if (res.data.token) {
-                localStorage.setItem("token", res.data.token);
-              }
-
-            } catch (error: any) {
-              toast(error.response?.data || "Login failed");
-            }
-          }}
+          onSubmit={handleSubmit}
         >
           <Form className="flex flex-col gap-4">
 
