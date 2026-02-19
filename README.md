@@ -65,31 +65,31 @@ Every emergency request is **location-aware**, every helper is **verified**, and
 <div align="center">
 
 ### Homepage
-<img src="public/med1.png" alt="MedLink Homepage" width="100%" />
+<img src="frontend/public/med1.png" alt="MedLink Homepage" width="100%" />
 
 <br/>
 
 ### Emergency Map & Live Tracking
-<img src="public/med2.png" alt="Emergency Map" width="49%" />
-<img src="public/med3.png" alt="Emergency Creation Flow" width="49%" />
+<img src="frontend/public/med2.png" alt="Emergency Map" width="49%" />
+<img src="frontend/public/med3.png" alt="Emergency Creation Flow" width="49%" />
 
 <br/>
 
 ### Emergency Types
-<img src="public/med4.png" alt="Blood Donation Request" width="49%" />
-<img src="public/med5.png" alt="Real-time Messaging" width="49%" />
+<img src="frontend/public/med4.png" alt="Blood Donation Request" width="49%" />
+<img src="frontend/public/med5.png" alt="Real-time Messaging" width="49%" />
 
 <br/>
 
 ### Trust & Verification System
-<img src="public/med6.png" alt="Trust Score Dashboard" width="49%" />
-<img src="public/med7.png" alt="Admin Control Panel" width="49%" />
+<img src="frontend/public/med6.png" alt="Trust Score Dashboard" width="49%" />
+<img src="frontend/public/med7.png" alt="Admin Control Panel" width="49%" />
 
 <br/>
 
 ### Profile & Hospital Finder
-<img src="public/med8.png" alt="User Profile & Verification" width="49%" />
-<img src="public/med9.png" alt="Hospital Finder Map" width="49%" />
+<img src="frontend/public/med8.png" alt="User Profile & Verification" width="49%" />
+<img src="frontend/public/med9.png" alt="Hospital Finder Map" width="49%" />
 
 </div>
 
