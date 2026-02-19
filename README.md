@@ -2,7 +2,7 @@
 
 <br/>
 
-<img src="public/med1.png" alt="MedLink Banner" width="100%" style="border-radius: 12px;" />
+<img src="frontend/public/med1.png" alt="MedLink Banner" width="100%" style="border-radius: 12px;" />
 
 <br/>
 <br/>
