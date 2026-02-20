@@ -9,6 +9,7 @@ import {
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
+    SidebarTrigger,
   } from "@/components/ui/sidebar"
 import { ChevronDown, DollarSign, Home, Hospital } from "lucide-react"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./ui/collapsible"
@@ -18,6 +19,7 @@ import Link from "next/link"
   export function AppSidebar() {
     return (
       <Sidebar collapsible="icon">
+           <SidebarTrigger  />
        <SidebarGroup>
   <SidebarGroupContent>
     <SidebarMenu>
