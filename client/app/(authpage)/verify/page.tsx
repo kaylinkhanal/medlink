@@ -1,101 +1,51 @@
 "use client";
 
-import Image from "next/image";
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
-import axios from "axios";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import axios from "axios";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
-const VerifySchema = Yup.object({
-  email: Yup.string().email("Invalid email").required("Email is required"),
-  code: Yup.string()
-    .length(6, "Code must be 6 digits")
-    .required("Verification code required"),
-});
-
-export default function VerifyCodePage() {
+export default function VerifyPage() {
+  const [otp, setOtp] = useState("");
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
+
+  const verify = async () => {
+    try {
+      const phone = localStorage.getItem("verifyPhone");
+
+      const res = await axios.post(
+        process.env.NEXT_PUBLIC_API_URL + "/verify-otp",
+        { phone, otp }
+      );
+
+      toast.success(res.data.message);
+      router.push("/login");
+
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message);
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center">
-      <div className="bg-white p-8 rounded-xl shadow-md w-[350px]">
-       
-        <div className="flex justify-center mb-4">
-          <Image
-            src="/medLinkLogo.png"
-            alt="Medlink Logo"
-            width={100}
-            height={100}
-            className="rounded-full"
-          />
-        </div>
-
-        <h2 className="text-2xl font-bold text-[#1E293B] mb-6 text-center">
-          Verify Your Account
+    <div className="min-h-screen flex justify-center items-center">
+      <div className="bg-white p-6 rounded-xl shadow-md w-[350px]">
+        <h2 className="text-xl font-bold mb-4 text-center">
+          Verify OTP
         </h2>
 
-        <Formik
-          initialValues={{ email: "", code: "" }}
-          validationSchema={VerifySchema}
-          onSubmit={async (values) => {
-            setLoading(true);
-            try {
-              const res = await axios.post(
-                "http://localhost:8080/auth/verify",
-                values
-              );
+        <input
+          value={otp}
+          onChange={(e) => setOtp(e.target.value)}
+          placeholder="Enter OTP"
+          className="border p-2 rounded w-full mb-3"
+        />
 
-              toast(res.data.message);
-              router.push("/login");
-
-            } catch (error: any) {
-              toast(error.response?.data?.message || "Verification failed");
-            } finally {
-              setLoading(false);
-            }
-          }}
+        <button
+          onClick={verify}
+          className="bg-blue-600 text-white p-2 rounded w-full"
         >
-          <Form className="flex flex-col gap-4">
-            <div>
-              <label className="text-sm text-[#64748B]">Email</label>
-              <Field
-                name="email"
-                type="email"
-                className="w-full border p-2 rounded-lg focus:outline-none focus:border-[#2A7FFF]"
-              />
-              <ErrorMessage
-                name="email"
-                component="div"
-                className="text-red-500 text-sm"
-              />
-            </div>
-
-            <div>
-              <label className="text-sm text-[#64748B]">Verification Code</label>
-              <Field
-                name="code"
-                type="text"
-                className="w-full border p-2 rounded-lg focus:outline-none focus:border-[#2A7FFF]"
-              />
-              <ErrorMessage
-                name="code"
-                component="div"
-                className="text-red-500 text-sm"
-              />
-            </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className={`bg-[#2A7FFF] text-white py-2 rounded-lg hover:bg-blue-600 transition ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
-            >
-              {loading ? "Verifying..." : "Verify"}
-            </button>
-          </Form>
-        </Formik>
+          Verify
+        </button>
       </div>
     </div>
   );
