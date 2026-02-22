@@ -14,7 +14,7 @@ const Page = () => {
   // Email validation
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
+    return emailRegex.test(email);                                
   };
 
   // Form submission

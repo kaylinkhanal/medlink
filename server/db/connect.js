@@ -1,10 +1,15 @@
 import mongoose from "mongoose";
 
-async function connect(){
-   const res =  await mongoose.connect('mongodb://127.0.0.1:27017/riderApp');
-   if(res.connections) {
-      console.log('Connected to MongoDB successfully!');
-   }
-}
+const connect = async () => {
+  try {
+    const conn = await mongoose.connect(
+      process.env.MONGO_URI || "mongodb://localhost:27017/medilink",
+    );
+    console.log(`MongoDB Connected: ${conn.connection.host}`);
+  } catch (error) {
+    console.error(`Error: ${error.message}`);
+    process.exit(1);
+  }
+};
 
 export default connect;
