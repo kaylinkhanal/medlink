@@ -446,6 +446,20 @@ export default function Home() {
             )}
           </div>
         </nav>
+        
+          {/* MAP */}
+        <section id="map" className="map-section">
+          <div className="map-topbar">
+            <div>
+              <div className="map-live"><div className="live-dot" /> Live · Updated in real time</div>
+              <h2 className="section-title" style={{ marginBottom: 0 }}>Find nearby hospitals <em>& emergencies.</em></h2>
+            </div>
+            <p style={{ fontSize: 14, color: 'var(--muted2)', maxWidth: 260, textAlign: 'right', lineHeight: 1.65 }}>
+              Search hospitals, clinics, and active emergencies around any location worldwide.
+            </p>
+          </div>
+          <GlobalHospitalMap />
+        </section>
 
         {/* HERO */}
         <section className="hero">
@@ -648,19 +662,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* MAP */}
-        <section id="map" className="map-section">
-          <div className="map-topbar">
-            <div>
-              <div className="map-live"><div className="live-dot" /> Live · Updated in real time</div>
-              <h2 className="section-title" style={{ marginBottom: 0 }}>Find nearby hospitals <em>& emergencies.</em></h2>
-            </div>
-            <p style={{ fontSize: 14, color: 'var(--muted2)', maxWidth: 260, textAlign: 'right', lineHeight: 1.65 }}>
-              Search hospitals, clinics, and active emergencies around any location worldwide.
-            </p>
-          </div>
-          <GlobalHospitalMap />
-        </section>
+      
 
         {/* CTA BANNER */}
         {!user && (
