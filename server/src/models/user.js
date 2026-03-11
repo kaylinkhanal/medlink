@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema({
   isVerified: { type: Boolean, default: false },
   verifyToken: { type: String, index: true },
   verifyTokenExpiry: Date,
-  walletBalance: 1000
+  walletBalance: { type: Number, default: 1000 }
 }, { timestamps: true });
 
 const User = mongoose.models.users || mongoose.model('users', userSchema);

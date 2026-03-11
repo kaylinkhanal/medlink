@@ -4,7 +4,7 @@ const medicalInfrastructureSchema = new Schema({
   name: { type: String, required: true },
   phone: { type: String, required: true },
   email: { type: String, lowercase: true, trim: true },
-  
+
   // Facilities
   hasICU: { type: Boolean, default: false },
   hasWheelchair: { type: Boolean, default: false },

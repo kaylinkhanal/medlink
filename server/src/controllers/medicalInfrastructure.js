@@ -15,8 +15,18 @@ const createMedicalInfrastructure = async (req, res) => {
 const getAllMedicalInfrastructures = async (req, res) => {
   try {
     // .populate('departments') replaces IDs with actual department data
-    const infrastructures = await MedicalInfrastructure.find().populate('departments');
-    res.json(infrastructures);
+
+    if(req.query.action === 'hasBloodBank') {
+      const infrastructures = await MedicalInfrastructure.find({ hasBloodBank: true }).populate('departments');
+      return res.json(infrastructures);
+    }else if(req.query.action === 'hasEmergency') {
+      const infrastructures = await MedicalInfrastructure.find({ hasAmbulanceOnCall: true }).populate('departments');
+      return res.json(infrastructures);
+    }else{
+      const infrastructures = await MedicalInfrastructure.find().populate('departments');
+      return res.json(infrastructures);
+    }
+ 
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -35,13 +45,13 @@ const getMedicalInfrastructureById = async (req, res) => {
 const editMedicalInfrastructureById = async (req, res) => {
   try {
     const updatedInfra = await MedicalInfrastructure.findByIdAndUpdate(
-      req.params.id, 
-      req.body, 
+      req.params.id,
+      req.body,
       { new: true, runValidators: true }
     ).populate('departments');
-    
+
     if (!updatedInfra) return res.status(404).json({ message: "Infrastructure not found" });
-    
+
     res.json({
       message: 'Updated successfully!',
       data: updatedInfra
@@ -61,10 +71,10 @@ const deleteMedicalInfrastructureById = async (req, res) => {
   }
 };
 
-export { 
-  createMedicalInfrastructure, 
-  getAllMedicalInfrastructures, 
-  getMedicalInfrastructureById, 
-  editMedicalInfrastructureById, 
-  deleteMedicalInfrastructureById 
+export {
+  createMedicalInfrastructure,
+  getAllMedicalInfrastructures,
+  getMedicalInfrastructureById,
+  editMedicalInfrastructureById,
+  deleteMedicalInfrastructureById
 };
