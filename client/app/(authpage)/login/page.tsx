@@ -17,7 +17,7 @@ const LoginSchema = Yup.object({
 export default function LoginPage() {
   const router = useRouter();
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async (values:any) => {
     try {
       const res = await axios.post(
         process.env.NEXT_PUBLIC_API_URL +  "/login",
@@ -38,7 +38,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center">
 
-      <div className="bg-white p-8 rounded-xl shadow-md w-[350px]">
+      <div className="bg-white p-8 rounded-xl shadow-md w-87.5">
         
         <div className="flex justify-center mb-4">
           <Image
