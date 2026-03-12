@@ -63,11 +63,6 @@ const bookingSchema = new Schema({
     default: "Pending"
   },
 
-  scheduledAt: {
-    type: Date,
-    required: true
-  },
-
   estimatedCost: {
     type: Number,
     default: 0

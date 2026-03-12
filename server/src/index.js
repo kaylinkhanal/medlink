@@ -5,6 +5,7 @@ import connect from "./db/connect.js";
 import authRouter from "./routes/user.js";
 import departmentRouter from "./routes/department.js";
 import medicalInfrastructureRouter from "./routes/medicalInfrastructure.js";
+import ambulanceRequest from "./routes/pickupdropup.js";
 
 dotenv.config();
 const app = express();
@@ -17,6 +18,7 @@ app.use(express.json());
 app.use(authRouter);
 app.use(departmentRouter);
 app.use(medicalInfrastructureRouter);
+app.use(ambulanceRequest)
 
 connect();
 

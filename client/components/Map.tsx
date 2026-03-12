@@ -13,6 +13,8 @@ import L from "leaflet";
 import { Button } from "./ui/button";
 import { useEffect, useMemo, useRef, useState } from "react";
 import axios from "axios";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
+import { Progress } from "./ui/progress";
 
 const hospitalSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6v4"/><path d="M14 14h-4"/><path d="M14 18h-4"/><path d="M14 8h-4"/><path d="M18 12h2a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2h2"/><path d="M18 22V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v18"/></svg>`;
 
@@ -133,8 +135,25 @@ const CHIPS = [
       }
   },[selectedInfrastructure?._id])
 
-  const handleConfirmation = () => {
+  const handleConfirmation = async() => {
+
     setStep(2)
+    await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/ambulance-request`, {
+      "user": "69927df76d304063daf3a5b8",
+      "hospital": selectedInfrastructure?._id,
+      "pickupLocation": {
+        "address": pickAddress,
+        "coordinates": { "type": "Point", "coordinates": [markerPosition.lat, markerPosition.lng] }
+      },
+      "dropLocation": {
+        "address": selectedInfrastructure?._id,
+        "coordinates": { "type": "Point", "coordinates": [ selectedInfrastructure?.location?.coordinates?.[0],  selectedInfrastructure?.location?.coordinates?.[1]] }
+      },
+      "type": "Ambulance",
+      "status": "Pending",
+      "estimatedCost": 100,
+    })
+
   }
   return (
     <div style={{ height: "100vh", width: "100%", position: "relative" }}>
@@ -193,11 +212,7 @@ const CHIPS = [
               </div>
             )}
           </div>
-
-          {/* Filter Chips */}
-         {
-         step == 2 &&
-         <div className="flex items-center gap-1.5 pointer-events-auto">
+          <div className="flex items-center gap-1.5 pointer-events-auto">
             {CHIPS.map((chip, idx) => {
               const Icon = chip.icon;
               return (
@@ -211,7 +226,10 @@ const CHIPS = [
                 </button>
               );
             })}
-          </div>}
+          </div>
+
+          {/* Filter Chips */}
+     
         </div>
 
         {/* Pickup Address Confirmation Banner */}
@@ -252,6 +270,26 @@ const CHIPS = [
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
+            {
+         step == 2 &&
+         <Dialog open={true}>
+       
+         <DialogContent className="z-[10000] w-[100%] bg-teal-50 rounded-xl shadow-lg border border-teal-200">
+           <DialogHeader>
+           <Progress value={90} className="w-[60%]" />
+             <DialogTitle>Finding ambulance service nearby....</DialogTitle>
+             <DialogDescription>
+              We are currently searching for available ambulance services in your area. Please wait while we connect you to the nearest one. This may take a few moments.
+             </DialogDescription>
+             <Button
+              onClick={()=> setStep(1)}
+             className="bg-red-500 hover:bg-red-600 active:scale-95 text-white text-xs font-semibold px-4 py-2 rounded-xl shadow-sm transition-all mt-4">
+              Cancel
+             </Button>
+           </DialogHeader>
+         </DialogContent>
+       </Dialog>
+        }
         <CircleMarker
           center={[latitude, longitude]}
           pathOptions={{ color: 'blue' }}

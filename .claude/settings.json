@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node src/seed.js)",
+      "Bash(curl -s http://localhost:8000/ambulance-request)",
+      "Bash(node -e \":*)",
+      "Bash(curl -s http://localhost:8000/ambulance-request/69b21b96e032479b0d032000)",
+      "Bash(curl -s -X PUT http://localhost:8000/ambulance-request/69b21b96e032479b0d032000 -H \"Content-Type: application/json\" -d '{\"\"status\"\": \"\"Confirmed\"\", \"\"notes\"\": \"\"CRUD test - updated\"\"}')",
+      "Bash(curl -s -X DELETE http://localhost:8000/ambulance-request/69b21b96e032479b0d032000)",
+      "Bash(curl -s -X PATCH http://localhost:8000/ambulance-request/69b21b196ccd0faa238acdb1 -H \"Content-Type: application/json\" -d '{\"\"\"\"status\"\"\"\": \"\"\"\"Confirmed\"\"\"\"}')",
+      "Bash(curl -s http://localhost:8000/ambulance-request/69b21b196ccd0faa238acdb1)",
+      "Bash(node -e \"let d='''''''';process.stdin.on\\(''''data'''',c=>d+=c\\).on\\(''''end'''',\\(\\)=>console.log\\(''''Persisted status:'''', JSON.parse\\(d\\).status\\)\\)\")"
+    ]
+  }
+}

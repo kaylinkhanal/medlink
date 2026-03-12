@@ -1,13 +1,13 @@
 import { Router } from "express";
-import { createpickupdropup, deletePickupDropupById, editPickupDropupById, getAllPickupDropups, getPickupDropupById } from "../controllers/pickupdropup.js";
+import { createpickupdropup, deletePickupDropupById, editPickupDropupById, getAllPickupDropups, getPickupDropupById, updatePickUpStatus } from "../controllers/pickupdropup.js";
 
 
 const pickupdropupRouter = Router();
 
-pickupdropupRouter.post('/pickupdropup', createpickupdropup);
-pickupdropupRouter.get('/pickupdropups', getAllPickupDropups);
-pickupdropupRouter.get('/pickupdropups/:id', getPickupDropupById);
-pickupdropupRouter.put('/pickupdropups/:id', editPickupDropupById);
-pickupdropupRouter.delete('/pickupdropups/:id', deletePickupDropupById);
-
+pickupdropupRouter.post('/ambulance-request', createpickupdropup);
+pickupdropupRouter.get('/ambulance-request', getAllPickupDropups);
+pickupdropupRouter.get('/ambulance-request/:id', getPickupDropupById);
+pickupdropupRouter.put('/ambulance-request/:id', editPickupDropupById);
+pickupdropupRouter.delete('/ambulance-request/:id', deletePickupDropupById);
+pickupdropupRouter.patch('/ambulance-request/:id',  updatePickUpStatus);
 export default pickupdropupRouter;

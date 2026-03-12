@@ -13,6 +13,21 @@ const createpickupdropup = async (req, res) => {
   }
 };
 
+
+const updatePickUpStatus = async (req, res) => {
+  try {
+    const booking = await Booking.findById(req.params.id);
+    booking.status = req.body.status;
+    await booking.save();
+    res.status(201).json({
+      message: 'Pickup/Dropup status updated successfully!',
+      data: booking
+    });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 const getAllPickupDropups = async (req, res) => {
   try {
 
@@ -114,5 +129,6 @@ export {
     getAllPickupDropups,
     getPickupDropupById,
     editPickupDropupById,
-    deletePickupDropupById
+    deletePickupDropupById,
+    updatePickUpStatus
 };  
