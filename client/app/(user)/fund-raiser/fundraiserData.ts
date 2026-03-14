@@ -1,7 +1,7 @@
 export const fundraiserData = {
   title: "Support a Life-Saving Cause",
   description:
-    "Help Priya, a 28-year-old teacher from Mumbai, receive the critical heart surgery she needs. Every contribution brings her one step closer to returning to the classroom she loves.",
+    "Help Priya, a 28-year-old teacher from Lalitpur, receive the critical heart surgery she needs. Every contribution brings her one step closer to returning to the classroom she loves.",
   goalAmount: 50000,
   raisedAmount: 32750,
   donorCount: 847,
@@ -24,12 +24,7 @@ export const fundraiserData = {
     { id: 7, name: "Karthik N.", amount: 150, time: "1 hour ago", message: "Every bit counts!" },
     { id: 8, name: "Deepa L.", amount: 750, time: "1 hour ago", message: "God bless you, Bhidu." },
   ],
-  impactItems: [
-    { amount: 100, label: "Medicine", description: "Covers essential daily medication for recovery" },
-    { amount: 500, label: "Diagnostic Tests", description: "Funds critical pre-surgery blood work and scans" },
-    { amount: 2000, label: "Surgery Support", description: "Contributes directly toward the surgical procedure" },
-    { amount: 5000, label: "Full Recovery", description: "Supports post-operative care and rehabilitation" },
-  ],
+
   updates: [
     { date: "Mar 12, 2026", text: "Pre-surgery tests completed successfully. Surgery scheduled for March 20th." },
     { date: "Mar 8, 2026", text: "Bhidu has been admitted to Apollo Hospital. Initial consultations are underway." },

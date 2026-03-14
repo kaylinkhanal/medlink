@@ -19,11 +19,12 @@ const DonationProgressSection = ({
 const data = fundraiserData;
 
   return (
-    <section className="container min-w-6xl  px-6 py-16">
+    <section className="container min-w-6xl mx-20  px-6 py-16">
       <div className="max-w-4xl mx-auto">
-        <h2 className="text-2xl md:text-3xl  text-center font-extrabold text-slate-900 mb-8">Donation Progress</h2>
+        <h2 className="text-2xl md:text-4xl  text-center font-extrabold text-slate-900 mb-8">Donation Progress</h2>
 
-        <div className="rounded-2xl bg-white/60 backdrop-blur-md ring-1 ring-white/30 shadow-xl p-8">
+        <div className="rounded-2xl font-stretch-50% bg-white/60 backdrop-blur-md ring-1 ring-white/30 shadow-xl p-8">
+        <div className="text-xl">{data.title}</div>
           {/* Progress bar */}
           <div className="mb-8">
             <div className="flex justify-between items-baseline mb-3">
@@ -37,10 +38,11 @@ const data = fundraiserData;
               />
             </div>
           </div>
-
-          {/* Stats */}
+          <div className="text-center p-4 rounded-xl bg-white/40 backdrop-blur-sm border border-white/20">
+              <div className="text-sm font-normal">{data.description}</div>
+            </div>
+            {/* Stats */}
           <div className="grid grid-cols-3 gap-6 mb-8">
-            
             <div className="text-center p-4 rounded-xl bg-white/40 backdrop-blur-sm border border-white/20">
               <TrendingUp className="w-5 h-5 text-primary mx-auto mb-2" />
               <div className="text-2xl font-bold text-foreground">{Math.round(percentage)}%</div>

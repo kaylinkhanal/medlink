@@ -39,7 +39,7 @@ export default function DonationDialog() {
     <AlertDialog>
       {/* Trigger Button */}
       <AlertDialogTrigger asChild>
-        <div className="group inline-flex  absolute top-4 right-20 cursor-pointer items-center gap-2 rounded-full border border-red-200  px-8 py-4 text-sm font-semibold text-red-700 shadow-sm transition-all duration-300 hover:bg-red-600 hover:text-white hover:shadow-md hover:-translate-y-0.5"
+        <div className="group inline-flex absolute top-4 right-20 cursor-pointer items-center gap-2 rounded-full border border-red-200  px-8 py-4 text-sm font-semibold text-red-700 shadow-sm transition-all duration-300 hover:bg-red-600 hover:text-white hover:shadow-md hover:-translate-y-0.5"
 							>
 								<HeartHandshakeIcon className="w-5 h-5 transition-transform duration-300 group-hover:scale-110" />
 								Donate
@@ -71,7 +71,7 @@ export default function DonationDialog() {
                       : "bg-white text-slate-800 border hover:shadow-md"
                   }`}
                 >
-                  Rs{amount}
+                  Rs. {amount}
                 </button>
               ))}
             </div>
@@ -128,10 +128,10 @@ export default function DonationDialog() {
 
           {/* Donate button */}
           <Button
-            className="w-full h-14 text-lg font-semibold rounded-xl bg-linear-to-r from-sky-600 to-teal-500 text-white shadow-xl"
+            className="w-full h-14 text-lg font-semibold rounded-xl bg-red-500 hover:bg-red-600 text-white shadow-xl"
             disabled={!activeAmount || activeAmount <= 0}
           >
-            Donate {activeAmount ? `$${activeAmount}` : "Now"}
+            Donate {activeAmount ? `Rs.${activeAmount}` : "Now"}
           </Button>
 
           <p className="text-center text-xs text-muted-foreground mt-4">
