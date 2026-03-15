@@ -6,6 +6,7 @@ import authRouter from "./routes/user.js";
 import departmentRouter from "./routes/department.js";
 import medicalInfrastructureRouter from "./routes/medicalInfrastructure.js";
 import ambulanceRequest from "./routes/pickupdropup.js";
+import sendMail from "./utils/sendMail.js";
 
 dotenv.config();
 const app = express();

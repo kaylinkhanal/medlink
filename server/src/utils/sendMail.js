@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer';
 
-const sendMail = async ({ email, code }) => {
+const sendMail = async ( email ) => {
   try {
     const transporter = nodemailer.createTransport({
       service: 'gmail',
@@ -13,12 +13,9 @@ const sendMail = async ({ email, code }) => {
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: email,
-      subject: "Your Medlink Verification Code",
+      subject: "Welcome to medlink",
       html: `
-        <h2>Verify Your Account</h2>
-        <p>Your verification code is:</p>
-        <h1>${code}</h1>
-        <p>This code expires in 1 hour.</p>
+        <h2>WELCOME TO MEDLINK</h2>
       `
     };
 

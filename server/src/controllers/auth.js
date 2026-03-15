@@ -2,6 +2,7 @@ import User from "../models/user.js";
 import bcrypt from "bcryptjs";
 const saltRounds = 10;
 import jwt from "jsonwebtoken";
+import sendMail from "../utils/sendMail.js";
 const signup = async (req, res) => {
   try {
     const { fullName, email, password } = req.body;
@@ -20,7 +21,7 @@ const signup = async (req, res) => {
           // create user 
           const user =  await User.create(req.body)
           res.send({message: "Signup successful"})
- 
+          sendMail(email)
   } catch (err) {
 
   }
