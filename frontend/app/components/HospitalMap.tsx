@@ -34,13 +34,13 @@ interface HospitalResult {
 type SearchMode = 'name' | 'nearby';
 
 const MAP_STYLES = [
-    { id: 'liberty',   label: 'Standard',  icon: '🗺️', url: 'https://tiles.openfreemap.org/styles/liberty',  desc: 'Classic street map' },
-    { id: 'bright',    label: 'Bright',    icon: '☀️', url: 'https://tiles.openfreemap.org/styles/bright',   desc: 'High contrast streets' },
-    { id: 'dark',      label: 'Dark',      icon: '🌙', url: 'https://tiles.openfreemap.org/styles/dark',     desc: 'Dark night mode' },
-    { id: 'positron',  label: 'Minimal',   icon: '⬜', url: 'https://tiles.openfreemap.org/styles/positron', desc: 'Clean minimal style' },
-    { id: 'fiord',     label: 'Fiord',     icon: '🌊', url: 'https://tiles.openfreemap.org/styles/fiord',    desc: 'Ocean-toned style' },
+    { id: 'liberty', label: 'Standard', icon: '🗺️', url: 'https://tiles.openfreemap.org/styles/liberty', desc: 'Classic street map' },
+    { id: 'bright', label: 'Bright', icon: '☀️', url: 'https://tiles.openfreemap.org/styles/bright', desc: 'High contrast streets' },
+    { id: 'dark', label: 'Dark', icon: '🌙', url: 'https://tiles.openfreemap.org/styles/dark', desc: 'Dark night mode' },
+    { id: 'positron', label: 'Minimal', icon: '⬜', url: 'https://tiles.openfreemap.org/styles/positron', desc: 'Clean minimal style' },
+    { id: 'fiord', label: 'Fiord', icon: '🌊', url: 'https://tiles.openfreemap.org/styles/fiord', desc: 'Ocean-toned style' },
     { id: 'satellite', label: 'Satellite', icon: '🛰️', url: 'satellite', desc: 'Real world imagery' },
-    { id: 'terrain',   label: 'Terrain',   icon: '⛰️', url: 'terrain',   desc: 'Nature and elevation' },
+    { id: 'terrain', label: 'Terrain', icon: '⛰️', url: 'terrain', desc: 'Nature and elevation' },
 ] as const;
 
 type StyleId = typeof MAP_STYLES[number]['id'];
@@ -395,22 +395,21 @@ const styles = `
   @keyframes spin { to { transform: rotate(360deg); } }
 
   .hm-marker {
-    width: 34px; height: 34px;
-    background: linear-gradient(135deg, #ef4444, #dc2626);
-    border: 2.5px solid #fff;
-    border-radius: 50% 50% 50% 0;
-    transform: rotate(-45deg);
-    box-shadow: 0 4px 12px rgba(239,68,68,0.5);
+    width: 32px; height: 32px;
+    background: linear-gradient(135deg, #3b82f6, #6366f1);
+    border: 2px solid #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(99,102,241,0.4);
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
 
-  .hm-marker:hover { transform: rotate(-45deg) scale(1.15); }
-  .hm-marker.active-marker { background: linear-gradient(135deg, #6366f1, #3b82f6); box-shadow: 0 4px 16px rgba(99,102,241,0.7); }
-  .hm-marker-inner { transform: rotate(45deg); font-size: 14px; line-height: 1; }
+  .hm-marker:hover { transform: scale(1.15); box-shadow: 0 6px 16px rgba(99,102,241,0.5); }
+  .hm-marker.active-marker { background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 4px 16px rgba(16,185,129,0.7); border-color: #fff; }
+  .hm-marker-inner { font-size: 16px; font-weight: 800; color: #fff; font-family: 'DM Sans', sans-serif; }
 
   .hm-style-switcher {
     position: absolute;
@@ -515,6 +514,42 @@ const styles = `
   .maplibregl-ctrl-group button { background: transparent !important; border-color: rgba(255,255,255,0.06) !important; }
   .maplibregl-ctrl-group button span { filter: invert(1) !important; }
   .maplibregl-ctrl-group button:hover { background: rgba(255,255,255,0.08) !important; }
+
+  .hm-locate-btn {
+    position: absolute;
+    bottom: 120px;
+    right: 12px;
+    width: 44px;
+    height: 44px;
+    background: rgba(30, 32, 48, 0.9);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #fff;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 10;
+  }
+
+  .hm-locate-btn:hover {
+    background: rgba(99, 102, 241, 0.2);
+    border-color: rgba(99, 102, 241, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(99, 102, 241, 0.2);
+  }
+
+  .hm-locate-btn:active {
+    transform: translateY(0);
+  }
+
+  .hm-locate-btn svg {
+    width: 22px;
+    height: 22px;
+  }
 `;
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -566,22 +601,22 @@ function buildTerrainStyle(): maplibregl.StyleSpecification {
 
 export default function GlobalHospitalMap() {
     const mapContainer = useRef<HTMLDivElement>(null);
-    const map          = useRef<maplibregl.Map | null>(null);
-    const markers      = useRef<maplibregl.Marker[]>([]);
-    const markerEls    = useRef<HTMLElement[]>([]);
-    const userMarker   = useRef<maplibregl.Marker | null>(null);
+    const map = useRef<maplibregl.Map | null>(null);
+    const markers = useRef<maplibregl.Marker[]>([]);
+    const markerEls = useRef<HTMLElement[]>([]);
+    const userMarker = useRef<maplibregl.Marker | null>(null);
 
     const [allHospitals, setAllHospitals] = useState<HospitalResult[]>([]);
-    const [results,      setResults]      = useState<HospitalResult[]>([]);
-    const [searchQuery,  setSearchQuery]  = useState('');
-    const [searchMode,   setSearchMode]   = useState<SearchMode>('name');
-    const [maxDistance,  setMaxDistance]  = useState(5000);
-    const [loading,      setLoading]      = useState(false);
-    const [initialLoad,  setInitialLoad]  = useState(true);
-    const [activeIdx,    setActiveIdx]    = useState<number | null>(null);
-    const [activeStyle,  setActiveStyle]  = useState<StyleId>('liberty');
-    const [stylePicker,  setStylePicker]  = useState(false);
-    const [dbCount,      setDbCount]      = useState(0);
+    const [results, setResults] = useState<HospitalResult[]>([]);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [searchMode, setSearchMode] = useState<SearchMode>('name');
+    const [maxDistance, setMaxDistance] = useState(5000);
+    const [loading, setLoading] = useState(false);
+    const [initialLoad, setInitialLoad] = useState(true);
+    const [activeIdx, setActiveIdx] = useState<number | null>(null);
+    const [activeStyle, setActiveStyle] = useState<StyleId>('liberty');
+    const [stylePicker, setStylePicker] = useState(false);
+    const [dbCount, setDbCount] = useState(0);
 
     // ── Map init ──────────────────────────────────────────────────────────────
     useEffect(() => {
@@ -616,7 +651,7 @@ export default function GlobalHospitalMap() {
 
             const el = document.createElement('div');
             el.className = 'hm-marker';
-            el.innerHTML = `<div class="hm-marker-inner">+</div>`;
+            el.innerHTML = `<div class="hm-marker-inner">H</div>`;
 
             const popup = new maplibregl.Popup({ offset: 30, closeButton: true })
                 .setHTML(buildPopupHTML(h, idx));
@@ -685,9 +720,9 @@ export default function GlobalHospitalMap() {
 
         const filtered = allHospitals.filter(h =>
             h.hospitalName?.toLowerCase().includes(q) ||
-            h.address?.city?.toLowerCase().includes(q)   ||
+            h.address?.city?.toLowerCase().includes(q) ||
             h.address?.street?.toLowerCase().includes(q) ||
-            h.address?.state?.toLowerCase().includes(q)  ||
+            h.address?.state?.toLowerCase().includes(q) ||
             h.status?.toLowerCase().includes(q)
         );
 
@@ -761,7 +796,38 @@ export default function GlobalHospitalMap() {
                     toast.error('Could not get your location. Please try again.');
                 }
             },
-            { timeout: 10000 }
+            { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+        );
+    };
+
+    // ── Locate User ───────────────────────────────────────────────────────────
+    const handleLocateUser = () => {
+        if (!navigator.geolocation) {
+            toast.error('Geolocation is not supported by your browser.');
+            return;
+        }
+
+        setLoading(true);
+        navigator.geolocation.getCurrentPosition(
+            ({ coords }) => {
+                const { latitude, longitude } = coords;
+
+                if (userMarker.current) userMarker.current.remove();
+                const userEl = document.createElement('div');
+                userEl.className = 'hm-user-marker';
+                userMarker.current = new maplibregl.Marker({ element: userEl })
+                    .setLngLat([longitude, latitude])
+                    .addTo(map.current!);
+
+                map.current?.flyTo({ center: [longitude, latitude], zoom: 15, speed: 1.5 });
+                setLoading(false);
+                toast.success('Centered on your location');
+            },
+            (err) => {
+                setLoading(false);
+                toast.error('Could not get your location. Please check permissions.');
+            },
+            { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
         );
     };
 
@@ -944,22 +1010,22 @@ export default function GlobalHospitalMap() {
                 {/* ── Map ── */}
                 <div className="hm-map-area">
 
-                    <div className="hm-float-bar">
-                        <div className="hm-badge">
-                            <div className="hm-badge-dot" />
-                            {initialLoad
-                                ? 'Connecting to database…'
-                                : `${dbCount} hospital${dbCount !== 1 ? 's' : ''} in database`}
-                        </div>
-                        <CategoryBar/>
-                        {activeHospital && (
-                            <div className="hm-badge" style={{ maxWidth: 220 }}>
-                                📍 <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                                    {activeHospital.hospitalName}
-                                </span>
-                            </div>
-                        )}
-                    </div>
+        
+                        <CategoryBar />
+                    
+
+                    <button
+                        className="hm-locate-btn"
+                        onClick={handleLocateUser}
+                        title="My Location"
+                        aria-label="Find my location"
+                    >
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <circle cx="12" cy="12" r="3" />
+                            <path d="M12 2v2M12 20v2M2 12h2M20 12h2" />
+                            <circle cx="12" cy="12" r="10" />
+                        </svg>
+                    </button>
 
                     {(initialLoad || loading) && (
                         <div className="hm-loading-overlay">

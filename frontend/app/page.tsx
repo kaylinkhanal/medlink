@@ -8,10 +8,12 @@ import GlobalHospitalMap from './components/HospitalMap';
 export default function Home() {
   const router = useRouter();
   const [user, setUser] = useState<{ role: string } | null>(null);
+  const [mounted, setMounted] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeCategory, setActiveCategory] = useState(0);
 
   useEffect(() => {
+    setMounted(true);
     const token = localStorage.getItem('token');
     const role = localStorage.getItem('role');
     if (token) setUser({ role: role || 'user' });
@@ -155,8 +157,8 @@ export default function Home() {
           mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 75%);
         }
         .hero-inner {
-          max-width: 1160px; margin: 0 auto; width: 100%;
-          display: grid; grid-template-columns: 1fr 440px; gap: 64px; align-items: center;
+          max-width: 800px; margin: 0 auto; width: 100%;
+          display: flex; flex-direction: column; align-items: center; text-align: center;
           position: relative;
         }
         .live-badge {
@@ -184,9 +186,9 @@ export default function Home() {
         }
         .hero-desc {
           font-size: 17px; line-height: 1.78; color: var(--muted);
-          max-width: 500px; margin-bottom: 36px;
+          max-width: 600px; margin: 12px auto 36px;
         }
-        .hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+        .hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
         .btn-primary {
           font-size: 15px; font-weight: 700; color: #fff; padding: 14px 28px;
           background: linear-gradient(135deg, var(--teal), var(--blue-mid));
@@ -428,38 +430,29 @@ export default function Home() {
             <span className="nav-brand-name">Med<span>Link</span></span>
           </a>
           <div className="nav-links">
-            {[['#emergency','Emergency'],['#features','Features'],['#how','How It Works'],['#map','Live Map']].map(([h,l]) => (
+            {[
+              ['#emergency', 'Emergency'],
+              ['#features', 'Features'],
+              ['#how', 'How It Works'],
+              ...(mounted && user ? [['#map', 'Live Map']] : [])
+            ].map(([h, l]) => (
               <a key={l} href={h} className="nav-lnk">{l}</a>
             ))}
           </div>
           <div className="nav-right">
-            {user ? (
+            {mounted && user ? (
               <>
                 <span className="nav-role">{user.role}</span>
                 <button onClick={handleLogout} className="btn-ghost">Logout</button>
               </>
-            ) : (
+            ) : mounted ? (
               <>
                 <Link href="/login" className="btn-ghost">Login</Link>
                 <Link href="/signup" className="btn-teal">Get Started</Link>
               </>
-            )}
+            ) : null}
           </div>
         </nav>
-        
-          {/* MAP */}
-        <section id="map" className="map-section">
-          <div className="map-topbar">
-            <div>
-              <div className="map-live"><div className="live-dot" /> Live · Updated in real time</div>
-              <h2 className="section-title" style={{ marginBottom: 0 }}>Find nearby hospitals <em>& emergencies.</em></h2>
-            </div>
-            <p style={{ fontSize: 14, color: 'var(--muted2)', maxWidth: 260, textAlign: 'right', lineHeight: 1.65 }}>
-              Search hospitals, clinics, and active emergencies around any location worldwide.
-            </p>
-          </div>
-          <GlobalHospitalMap />
-        </section>
 
         {/* HERO */}
         <section className="hero">
@@ -478,111 +471,27 @@ export default function Home() {
               <p className="hero-desc">
                 Real-time emergency coordination connecting patients with blood donors, ambulances, ICU beds, organ donors, and community volunteers — all verified, all fast.
               </p>
-              {!user ? (
-                <div className="hero-ctas">
-                  <Link href="/signup" className="btn-primary">🆘 Request Emergency Help</Link>
-                  <Link href="/login" className="btn-secondary">Volunteer to Help →</Link>
-                </div>
-              ) : (
-                <Link href="/dashboard" className="btn-primary">Go to Dashboard →</Link>
-              )}
-              <div className="hero-note">🛡️ QR-verified hospitals · Trust Score system · Blockchain-ready</div>
-            </div>
-
-            <div className="hero-panel">
-              {[
-                { icon: '🩸', label: 'Blood Requests', sub: 'Active nearby', bar: 72, color: '#dc2626', bg: '#fef2f2' },
-                { icon: '🚑', label: 'Ambulance Dispatch', sub: 'Live tracking', bar: 88, color: '#0891b2', bg: '#ecfeff' },
-                { icon: '🛏️', label: 'ICU Beds Available', sub: '3 hospitals reporting', bar: 45, color: '#1d4ed8', bg: '#eff6ff' },
-              ].map(c => (
-                <div key={c.label} className="hcard">
-                  <div className="hcard-head">
-                    <div className="hcard-icon" style={{ background: c.bg }}>{c.icon}</div>
-                    <div>
-                      <div className="hcard-label">{c.label}</div>
-                      <div className="hcard-sub">{c.sub}</div>
-                    </div>
-                  </div>
-                  <div className="bar-bg">
-                    <div className="bar-fill" style={{ width: `${c.bar}%`, background: c.color }} />
-                  </div>
-                </div>
-              ))}
-              <div className="stat-row">
-                <div className="stat-box">
-                  <div className="stat-num">6<sup>+</sup></div>
-                  <div className="stat-lbl">Emergency types covered</div>
-                </div>
-                <div className="stat-box">
-                  <div className="stat-num" style={{ fontSize: 18, fontWeight: 800, lineHeight: 1.4 }}>QR<br />Verified</div>
-                  <div className="stat-lbl">Hospital network</div>
-                </div>
-              </div>
             </div>
           </div>
         </section>
 
         <hr className="divider" />
 
-        {/* EMERGENCY CATEGORIES */}
-        <section id="emergency">
-          <div className="section" style={{ paddingBottom: 32 }}>
-            <div className="section-tag">Emergency Types</div>
-            <h2 className="section-title">Six crises. <em>One platform.</em></h2>
-            <p className="section-desc">From blood requests to ICU beds — MedLink handles every type of medical emergency with the right people and tools.</p>
-          </div>
-          <div className="cat-wrap">
-            <div className="cat-tabs">
-              {categories.map((c, i) => (
-                <div key={c.label} className={`cat-tab${activeCategory === i ? ' active' : ''}`} onClick={() => setActiveCategory(i)}>
-                  <span className="cat-icon">{c.icon}</span>
-                  <span className="cat-name">{c.label}</span>
-                  <div className="cat-dot" style={{ background: c.color }} />
-                </div>
-              ))}
+        {/* MAP */}
+        {mounted && user && (
+          <section id="map" className="map-section">
+            <div className="map-topbar">
+              <div>
+                <div className="map-live"><div className="live-dot" /> Live · Updated in real time</div>
+                <h2 className="section-title" style={{ marginBottom: 0 }}>Find nearby hospitals <em>& emergencies.</em></h2>
+              </div>
+              <p style={{ fontSize: 14, color: 'var(--muted2)', maxWidth: 260, textAlign: 'right', lineHeight: 1.65 }}>
+                Search hospitals, clinics, and active emergencies around any location worldwide.
+              </p>
             </div>
-            <div className="cat-detail">
-              <span className="cat-detail-icon">{categories[activeCategory].icon}</span>
-              <div className="cat-detail-badge" style={{ color: categories[activeCategory].color, background: `${categories[activeCategory].color}18` }}>
-                Emergency Category
-              </div>
-              <div className="cat-detail-title">{categories[activeCategory].label}</div>
-              <div className="cat-detail-desc">{categories[activeCategory].desc}</div>
-              <div className="cat-pills">
-                {['Real-time alerts','Location-based','Verified helpers','Chat + Call'].map(p => (
-                  <span key={p} className="cat-pill">{p}</span>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <hr className="divider" />
-
-        {/* FEATURES */}
-        <section id="features" className="section">
-          <div className="section-tag">Platform Features</div>
-          <h2 className="section-title">Built for <em>speed</em> and trust.</h2>
-          <p className="section-desc">Everything needed to coordinate a medical emergency from first alert to resolution.</p>
-          <div className="feat-grid">
-            {[
-              { icon: '📍', name: 'Live Location Tracking', desc: 'Auto-detect or set manually. Color-coded markers, clustering, and Haversine distance sorting on an interactive map.' },
-              { icon: '✅', name: 'QR Verification', desc: 'Hospitals issue QR codes. Patients scan on-site with doctor signature and timestamp — blockchain-ready.' },
-              { icon: '💬', name: 'Real-time Messaging', desc: 'One-to-one and group emergency chats. Unread badges, message search, and direct in-app call escalation.' },
-              { icon: '🔔', name: 'Smart Alerts', desc: 'Push, SMS, and email notifications. Configurable radius and emergency category preferences per user.' },
-              { icon: '💰', name: 'Emergency Fundraising', desc: 'Verified campaigns with target amounts, patient stories, and mandatory hospital document approval.' },
-              { icon: '🛡️', name: 'Trust Score System', desc: '0–100% dynamic score. Verifications, helping, and donations raise it. Flags and cancellations lower it.' },
-              { icon: '👨‍💼', name: 'Admin Dashboard', desc: 'User moderation, emergency flagging, report queues, post review, and geographic analytics all in one panel.' },
-              { icon: '🔐', name: 'Secure Auth + RBAC', desc: 'JWT with 7-day access and 30-day refresh tokens. Role-based access for Users, Doctors, NGOs, and Admins.' },
-            ].map(f => (
-              <div key={f.name} className="feat-card">
-                <span className="feat-icon">{f.icon}</span>
-                <div className="feat-name">{f.name}</div>
-                <div className="feat-desc">{f.desc}</div>
-              </div>
-            ))}
-          </div>
-        </section>
+            <GlobalHospitalMap />
+          </section>
+        )}
 
         <hr className="divider" />
 
@@ -614,28 +523,7 @@ export default function Home() {
               <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.75 }}>
                 Every action on MedLink affects your Trust Score — it determines how visible your emergency is, who sees your request first, and how the community reads your profile.
               </p>
-              <div className="trust-score-row">
-                <div className="trust-big-num">78</div>
-                <div className="trust-big-label">/ 100 sample score</div>
-              </div>
-              <div className="trust-bars">
-                {[
-                  { l: 'Verification Approved', v: '+20%', pct: 100, pos: true },
-                  { l: 'Emergency Fulfilled',   v: '+10%', pct: 50,  pos: true },
-                  { l: 'Emergency Helped',       v: '+5%',  pct: 25,  pos: true },
-                  { l: 'Donation Made',          v: '+3%',  pct: 15,  pos: true },
-                  { l: 'Reported / Flagged',     v: '−20%', pct: 100, pos: false },
-                  { l: 'Emergency Cancelled',    v: '−5%',  pct: 25,  pos: false },
-                ].map(t => (
-                  <div key={t.l} className="tbar">
-                    <div className="tbar-lbl">{t.l}</div>
-                    <div className="tbar-bg">
-                      <div className="tbar-fill" style={{ width: `${t.pct}%`, background: t.pos ? 'var(--teal)' : '#dc2626' }} />
-                    </div>
-                    <div className="tbar-val" style={{ color: t.pos ? 'var(--teal-dark)' : '#dc2626' }}>{t.v}</div>
-                  </div>
-                ))}
-              </div>
+
             </div>
             <div>
               <div className="section-tag">Verification</div>
@@ -662,10 +550,10 @@ export default function Home() {
           </div>
         </div>
 
-      
+
 
         {/* CTA BANNER */}
-        {!user && (
+        {mounted && !user && (
           <div className="cta-banner">
             <div className="cta-inner">
               <h2 className="cta-title">Ready to <em>save</em> a life?</h2>
@@ -691,7 +579,7 @@ export default function Home() {
             <span className="footer-copy" style={{ marginLeft: 14 }}>© 2025 MedLink. Emergency Healthcare Platform.</span>
           </div>
           <div className="footer-links">
-            {[['Privacy','#'],['Terms','#'],['Contact','#'],['Admin','/login']].map(([l,h]) => (
+            {[['Privacy', '#'], ['Terms', '#'], ['Contact', '#'], ['Admin', '/login']].map(([l, h]) => (
               <a key={l} href={h} className="footer-link">{l}</a>
             ))}
           </div>

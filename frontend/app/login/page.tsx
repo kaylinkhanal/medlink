@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 
@@ -11,6 +11,11 @@ export default function LoginPage() {
     password: ''
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -34,10 +39,22 @@ export default function LoginPage() {
 
       if (response.ok) {
         const data = await response.json();
-        localStorage.setItem('token', data.token);
-        toast.success('Welcome back! Login successful!');
+        const { token, user } = data;
+
+        localStorage.setItem('token', token);
+        localStorage.setItem('role', user.role);
+        localStorage.setItem('name', user.name);
+
+        toast.success(`Welcome back, ${user.name}!`);
+
         setTimeout(() => {
-          router.push('/');
+          if (user.role === 'admin') {
+            router.push('/adminDashboard');
+          } else if (user.role === 'hospitalstaff') {
+            router.push('/hospitalDashboard');
+          } else {
+            router.push('/userDashboard');
+          }
         }, 1500);
       } else {
         const error = await response.json();
